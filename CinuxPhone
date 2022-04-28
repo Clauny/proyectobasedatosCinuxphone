@@ -1,0 +1,117 @@
+create database Cinuxphone
+use Cinuxphone
+
+create table TBL_Cliente(
+
+Id int identity primary key, --CLAVE PRINCIPAL - PRIMARY KEY.
+Nombre varchar(100) not null,
+Apellido varchar(100) not null,
+Telefono varchar(12),
+Direccion varchar(150),
+)
+
+--TABLA EMPLEADOS
+
+create table TBL_Empleados(
+Id int identity primary key, --CLAVE PRINCIPAL - PRIMARY KEY.
+Nombres varchar(100) not null,
+Apellidos varchar(100) not null,
+Posicion varchar(150) not null,
+Cedula varchar(13) unique not null , --CAMPO UNICO, NO SE PUEDE REPETIR Y DE HACERLO LANZARA UN ERROR DE LA CLAVE DE INTEGRIDAD UNIQUE.
+Sexo char(1),
+Fecha_Nacimiento date not null,
+Direccion varchar(150),
+Nacionalidad varchar(100) not null,
+Salario int not null,
+Fecha_Ingreso date not null default getdate(), --GETDATE() ES UNA FUNCION PARA PONER LA FECHA DEL SISTEMA Y DEFAULT ES EN CASO DE DEJARLO VACIO.
+Edad int not null,
+Telefono varchar(12)
+)
+create table TBL_Producto(
+Id int identity primary key, --CLAVE PRINCIPAL - PRIMARY KEY.
+Modelo varchar(100) not null,
+Color varchar(25),
+Precio int not null,
+Cantidad int not null,
+)
+
+create table Reclamos(
+Id int identity primary key, --CLAVE PRINCIPAL - PRIMARY KEY.
+IdCliente int foreign key references TBL_Cliente(id)not null, --CLAVE FORANEA REALIZA UNA RELACION ENTRE LA TABLA HIJA EN ESTE CASO DONDE SE ENCUENTRA Y LA TABLA PADRE QUE ES DONDE SE ESTA REFERENCIANDO
+IdEmpleado int foreign key references TBL_Empleados(id)not null, --CLAVE FORANEA REALIZA UNA RELACION ENTRE LA TABLA HIJA EN ESTE CASO DONDE SE ENCUENTRA Y LA TABLA PADRE QUE ES DONDE SE ESTA REFERENCIANDO
+IdProducto int foreign key references TBL_Producto(id)not null,
+Motivo text not null,
+Fecha_Reclamo date not null default getdate() --GETDATE() ES UNA FUNCION PARA PONER LA FECHA DEL SISTEMA Y DEFAULT ES EN CASO DE DEJARLO VACIO.
+)
+
+
+create table TBL_Pedido(
+Id int identity primary key, --CLAVE PRINCIPAL - PRIMARY KEY.
+IdCliente int foreign key references TBL_Cliente(id)not null,--CLAVE FORANEA REALIZA UNA RELACION ENTRE LA TABLA HIJA EN ESTE CASO DONDE SE ENCUENTRA Y LA TABLA PADRE QUE ES DONDE SE ESTA REFERENCIANDO
+IdEmpleado int foreign key references TBL_Empleados(id)not null,--CLAVE FORANEA REALIZA UNA RELACION ENTRE LA TABLA HIJA EN ESTE CASO DONDE SE ENCUENTRA Y LA TABLA PADRE QUE ES DONDE SE ESTA REFERENCIANDO
+IdProducto int foreign key references TBL_Producto(id)not null,--CLAVE FORANEA REALIZA UNA RELACION ENTRE LA TABLA HIJA EN ESTE CASO DONDE SE ENCUENTRA Y LA TABLA PADRE QUE ES DONDE SE ESTA REFERENCIANDO
+Cantidad_Comprada int not null default 1,
+Fecha_Solicitud date not null default getdate() --GETDATE() ES UNA FUNCION PARA PONER LA FECHA DEL SISTEMA Y DEFAULT ES EN CASO DE DEJARLO VACIO.
+)
+
+
+--Insercion de datos en la tabla clientes.
+insert into TBL_Cliente values ('Franklyn','Brea','809-743-5818','C/San Maritin Esq Noria')
+insert into TBL_Cliente values ('Miguel','Villar','809-743-5818','C/Mexico Esq Central')
+insert into TBL_Cliente values ('Angel','Guzman','829-890-5568','C/27 de febrero')
+insert into TBL_Cliente values ('Benjamin','Espinal','809-707-6952','C/Trinitaria Esq Carrera')
+insert into TBL_Cliente values ('Clauny','Lorenzo','809-728-9823','C/San Pablo Esq la 8')
+
+
+--Insercion de datos en la tabla empleados.
+insert into TBL_Empleados values ('Marcos','Fernández','Administrador','402-7438245-8','M','2002/11/19'
+,'c/ el sol n.12 Buenos Aires de Herrera','Dominicano',33000,GETDATE(),19,'809-776-8293')
+
+insert into TBL_Empleados values ('DaVinci','Montas','Vendedor','001-7858224-3','M','2002/01/12'
+,'Los frailes, Autopista Las Americas','Dominicano',33000,GETDATE(),19,'829-286-0463')
+
+insert into TBL_Empleados values ('Maria','Cordero','Vendedor','402-839372-1','F','2004/04/02'
+,'c/Dr. piñeyro .206 zona universitaria','Dominicano',34000,GETDATE(),18,'849-896-5781')
+
+insert into TBL_Empleados values ('Ailam','rosario','Dueño','001-7685768-9','M','2001/01/10'
+,' c/ montoso n.17 altos de arroyo hondo','Dominicano',33000,GETDATE(),21,'829-679-4733')
+
+insert into TBL_Empleados values ('Luis','caldera','Vendedor','001-7656569-0','M','2000/11/12'
+,'avenida independencia torre armonía 408 apart 3-B , gazcue','Dominicano',30000,GETDATE(),21,'809-786-4893')
+
+--Insercion de la tabla producto/Articulos
+insert into TBL_Producto values ('Oppo Find X3 Pro','Negro',17000,109)
+insert into TBL_Producto values ('Galaxy Note 20 Ultra','Blanco',15500,500)
+insert into TBL_Producto values ('Pixel 5','Plata',20199,10)
+insert into TBL_Producto values ('Pixel 4a','Dorado',23599,10)
+insert into TBL_Producto values ('Galaxy Z Fold 2','Negro',19999,200)
+
+--Insercion de la tabla Reclamos
+insert into Reclamos values (1,1,5,'El telefono llego la pantalla cuartiada', GETDATE())
+insert into Reclamos values (2,3,4,'La bateria del telefono se descarga demasiado rapido.', GETDATE())
+insert into Reclamos values (3,5,3,'El touch de la pantalla del telefono presenta dificultad a la hora de usarlo.', GETDATE())
+insert into Reclamos values (4,2,2,'El telefono no carga cuando lo conecto a la corriente electrica.', GETDATE())
+insert into Reclamos values (5,4,1,'El telefono no me deja hacer llamadas, ni bajar ni actualizar ninguna de las app que tiene el dispositivo.', GETDATE())
+
+--Insercion de la tabla Pedidos
+insert into TBL_Pedido values (5,2,1,1, GETDATE())
+insert into TBL_Pedido values (4,4,2,1, GETDATE())
+insert into TBL_Pedido values (3,1,3,1, GETDATE())
+insert into TBL_Pedido values (2,3,4,1, GETDATE())
+insert into TBL_Pedido values (1,5,5,1, GETDATE())
+
+select * from TBL_Cliente
+
+select * from TBL_Empleados
+
+select * from TBL_Producto
+
+select TBL_Cliente.Nombre as Nombre, TBL_Cliente.Apellido as apellido, TBL_Empleados.Nombres as representante,TBL_Producto.Modelo, Motivo,Fecha_Reclamo from Reclamos 
+inner join TBL_Cliente on TBL_Cliente.Id = Reclamos.IdCliente
+inner join TBL_Empleados on TBL_Empleados.Id = Reclamos.IdEmpleado
+inner join TBL_Producto on TBL_Producto.Id = Reclamos.IdProducto
+
+select  TBL_Cliente.Nombre as Nombre, TBL_Cliente.Apellido as apellido, TBL_Empleados.Nombres as representante,TBL_Producto.Modelo,Cantidad_Comprada,Fecha_Solicitud from TBL_Pedido
+inner join TBL_Cliente on TBL_Cliente.Id = TBL_Pedido.IdCliente
+inner join TBL_Empleados on TBL_Empleados.Id = TBL_Pedido.IdEmpleado
+inner join TBL_Producto on TBL_Producto.Id = TBL_Pedido.IdProducto
